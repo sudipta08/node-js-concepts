@@ -1,0 +1,175 @@
+1. Primitive data types -> in-built data types provided by JS, like, number, boolean, string, bigint, undefined, null -> these can hold only one value at once
+2. Derived data types -> ones which are used to store more complex values, like, objects
+
+typeof is used to get the type of a variable
+typeof 'sud' -> string
+typeof 1 -> number
+typeof true -> boolean
+typeof undefined -> undefined
+typeof null -> object
+typeof [] -> object
+typeof function/class -> function
+
+Everything else in JS is an object. An object means something which has its own set of properties and things which it can do i.e. methods/functions. For example, array has properties like length, methods like sort, map, slice, reduce etc. Infact, we can also do 'sud'.length because internally JS converts it into String object which has its own set of properties.
+
+this is a keyword in JS, which refers to an object. Depending on the scope/context, it has different values.
+1. const a = {
+	name: 'sudipta',
+	getName: function() {
+		return this.name;
+	}
+} -> Here, this refers to the parent object and this.name will return 'sudipta'
+2. const b = {
+	name: 'sudipta',
+	getName: () => {
+		return this;
+	}
+} -> Here, this refers to the global object, which will be window object in browser and global in node. Same goes for IIFE
+
+Global is an object which has all the built-in functions and variables that node provides throughout the application, e.g., process, console etc. So, we don't have to import these before using.
+
+Encapsulation is a way of bundling/grouping the data and their associated methods/functions in one unit. It can be acheived with objects, functions and classes.
+1. Since all the code related to a feature/component is in one place, code becomes more manageable
+2. External code interacts with the object only through its available methods, so we can ensure that data is not modified inappopriately, thereby giving more control
+
+Classes are templates used for creating objects with similar properties and methods. They are similar to functions and use prototypes under the hood.
+new keyword is used to create a new instance of a class, which is basically an object
+constructor function is called first, which initialises the properties of this new object
+
+Inheritance is a way using which one class inherits the properties and methods of another one and build some additional functionalities on top of that
+class User { // parent class
+	constructor (name) {
+		this.name = name;
+	}
+	login() {
+		console.log('logged in');
+	}
+}
+class Admin extends User { // child class
+	deleteUser() {
+		console.log('deleted user');
+	}
+}
+
+1. If there is no constructor in the child class, the one from parent class will be invoked.
+2. If we want to add some additional properties to the constructor we need to call super() in the constructor of child class.
+3. Properties and methods of child class will override the ones from parent class.
+
+Before ES6, this was achieved with functions. class is just a syntactic sugar
+function User(name) {
+	this.name = name;
+	this.login = function() { // we can do this but not preferred, prototype inheritance can't be done
+		console.log('logged in');
+	}
+}
+// instead the functions should be attached on prototype, and classes do that under the hood
+User.prototype.login = function() {
+	console.log('logged in');
+}
+
+const user1 = new User('sudipta');
+
+function Admin(...args) {
+	User.apply(this, args); // this will inherit all the properties of User function, except the prototype object
+}
+
+Admin.prototype = Object.create(User.prototype); // inherit all the functions on prototype of User
+
+Admin.prototype.deleteUser = function() {
+	console.log('deleted user');
+}
+
+const adminUser = new Admin('rikita');
+
+Rest parameters, identified by ..., allow a function to accept any number of arguments and converts it into an array.
+
+Every object in JS has a prototype property, which holds all the associated methods and properties provided by JS. For example, array is an object and we can use functions like filter/sort on top of an array but we never define them, so how are we able to use them. That's because Array has a prototype property which has all the methods like filter/sort attached, and in fact properties like length as well. So we don't have to define them again and again, we just borrow them from the prototype property.
+
+call(this, any extra arguments separated by comma) is used to call a method by passing the parent object as an argument. In other words, an object can call a method belonging to another object.
+apply(this, any extra arguments in an array) is used to call a method by passing the parent object as an argument.
+const funcs = {
+	func1: function(country) {
+		return this.name + ', ' + country;
+	}
+}
+
+const user = {name: 'sudipta'};
+
+funcs.func1.call(user, 'India');
+funcs.func1.apply(user, ['India']);
+
+Object.create is used to create a new object from an existing one but as a prototype
+const x = {
+	name: 'sudipta',
+	print: function() {
+		console.log(this.name, this.country);
+	}
+}
+
+const y = Object.create(x);
+Now y will be an empty object with name and print available in its prototype
+y.print() will yield sudipta undefined, as country is not defined
+
+setTimeout(function(){}, 0) - It executes a callback function after waiting for a specified amount of time in ms. It is not executed immediately, rather it's added to a queue. Once the entire code block is run, this function gets picked up from the queue by the event loop and then executed.
+
+OUTPUT
+1. function func1(){
+	setTimeout(()=>{
+		console.log(x);
+		console.log(y);
+	},3000);
+
+	var x = 2;
+	let y = 12;
+}
+
+func1();
+
+This will print 2 and 12. Since setTimeout will run after the whole function code finishes, so it will have access to x and y.
+
+2. function func2(){
+	for(var i = 0; i < 3; i++){
+		setTimeout(()=> console.log(i),2000);
+	}
+}
+func2();
+
+This will print 3, three times, because each setTimeout will be executed after the entire for loop is run. Since var is function scoped, so the value at the end will be 3.
+
+	Approach 1:
+	However, if we use let here, which is block scoped, the value of i will persist for each iteration.
+
+	Approach 2: Using IIFE
+	function func2(){
+		for(var i = 0; i < 3; i++){ // it won't matter if i am using let or var
+			(function (i) {
+				setTimeout(()=> console.log(i),2000);
+			})(i);
+		}
+	}
+
+	Approach 3: Using a separate function
+	function func3(i) {
+		setTimeout(()=> console.log(i),2000);
+	}
+	function func2(){
+		for(var i = 0; i < 3; i++){ // it won't matter if i am using let or var
+			func3(i);
+		}
+	}
+
+3. let x = {}, y = {name:"Ronny"},z = {name:"John"};
+x[y] = {name:"Vivek"};
+x[z] = {name:"Akki"};
+console.log(x[y]);
+
+x[y] = x['[object Object]'], same as x[z]
+Output will be {name: 'Akki'}
+
+4. function runFunc(){
+	console.log("1" + 1); // 11 -> always concatenate if one of the operands is string
+	console.log("A" - 1); // NaN
+	console.log(2 + "-2" + "2"); // 2-22
+	console.log("Hello" - "World" + 78); // NaN
+	console.log("Hello"+ "78"); // Hello78
+}
