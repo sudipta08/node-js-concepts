@@ -1,7 +1,7 @@
 1. Primitive data types -> in-built data types provided by JS, like, number, boolean, string, bigint, undefined, null -> these can hold only one value at once
 2. Derived data types -> ones which are used to store more complex values, like, objects
 
-typeof is used to get the type of a variable
+typeof is used to get the type of data
 typeof 'sud' -> string
 typeof 1 -> number
 typeof true -> boolean
