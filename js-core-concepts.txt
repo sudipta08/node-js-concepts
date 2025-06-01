@@ -1,9 +1,26 @@
+JS is a dynamically typed language, which means the type of a variable is checked at run-time as opposed to TS where it's checked at the time of compilation.
+
 1. Primitive data types -> in-built data types provided by JS, like, number, boolean, string, bigint, undefined, null -> these can hold only one value at once
 2. Derived data types -> ones which are used to store more complex values, like, objects
+
+Hoisting
+	1. JS interpreter moves the declaration of variables, functions, classes and imports to the top of their scope, before executing the code.
+	2. Variables decalred with var are hoisted to the top of their scope and initialised with a value of undefined. So, they are accessible before their declaration.
+	3. Variables declared with const and let are also hoisted, but they are not initialised. So, they cannot be accessed before they are declared, thereby throwing ReferenceError. Classes also behave the same way.
+	4. Temporal Dead Zone is the period between entering the scope of a function or a block of code and declaring let or const variables. If these variables are accessed before they are declared, they result in ReferenceError.
+
+Lexical Scoping
+	1. It's the term used to define how the variables are scoped (accessible) in JS based on where they are decalred and not where they are used.
+	2. Global scope means a variable is accessible throughout the code.
+	3. Function scope means a variable is accessible only inside a function. var is function scoped.
+	4. Block scope means a variable is accessible inside a block designated by curly braces. let and const are block scoped.
+
+Coercion - when a value is automatically converted from one data type to another. For example, in 3 + '5', 3 is converted into a string to produce output 35. Also, in conditional statements, a condition is evaluated into a boolean value.
 
 typeof is used to get the type of data
 typeof 'sud' -> string
 typeof 1 -> number
+typeof NaN -> number
 typeof true -> boolean
 typeof undefined -> undefined
 typeof null -> object
@@ -11,6 +28,30 @@ typeof [] -> object
 typeof function/class -> function
 
 Everything else in JS is an object. An object means something which has its own set of properties and things which it can do i.e. methods/functions. For example, array has properties like length, methods like sort, map, slice, reduce etc. Infact, we can also do 'sud'.length because internally JS converts it into String object which has its own set of properties.
+
+Pass by value and pass by reference - all primitive types are passed by value whereas objects and arrays are passed by reference.
+var x = 10; -> space is allocated in memory for holding value 10 and x points to this memory location
+var y = x; -> another space is allocated in memory for holding value 10 and y points to this location
+var m = {} -> space is allocated in memory for holding an empty object
+var n = m; -> n still points to theme location that m points to
+
+Higher order functions - which accept function as arguments or return them.
+
+call(this, any extra arguments separated by comma) is used to call a method by passing the parent object as an argument. In other words, an object can call a method belonging to another object.
+apply(this, any extra arguments in an array) is used to call a method by passing the parent object as an argument.
+bind - is used for setting the context of this keyword and behaves similar to call, but returns a function which can be invoked later. 
+const funcs = {
+	func1: function(country) {
+		return this.name + ', ' + country;
+	}
+}
+
+const user = {name: 'sudipta'};
+
+funcs.func1.call(user, 'India');
+funcs.func1.apply(user, ['India']);
+const boundfunction = funcs.func1.bind(user, 'India);
+boundfunction();
 
 this is a keyword in JS, which refers to an object. Depending on the scope/context, it has different values.
 1. const a = {
@@ -27,6 +68,43 @@ this is a keyword in JS, which refers to an object. Depending on the scope/conte
 } -> Here, this refers to the global object, which will be window object in browser and global in node. Same goes for IIFE
 
 Global is an object which has all the built-in functions and variables that node provides throughout the application, e.g., process, console etc. So, we don't have to import these before using.
+
+Currying - is a technique of transforming a function which takes multiple arguments into a series of functions which takes one argument at a time.
+function add(a,b) {
+	return a + b;
+}
+function add(a) {
+	return function(b) {
+		return a + b;
+	}
+} -> one advantage of doing this is that we keep some of the arguments same and change the rest. For example, x = add(10); y = x(39); z = x(90);
+
+Closure - is the capability of a function to access variables and functions from its outer scope (even after the outer function has executed).
+function func1() {
+	let counter = 0;
+	function incrementCounter() {
+		counter++;
+	}
+	function getCounter() {
+		return counter;
+	}
+	return {incrementCounter, getCounter};
+}
+const result = func1();
+result.incrementCounter();
+result.getCounter();
+
+Callback functions are passed as an argument to another unction and generally they are called when a specific task has completed.
+
+Memoization - is the technique of caching results of a function based on input parameters.
+function getResult() {
+	const cache = {};
+	return function(num) {
+		if (cache[num]) console.log('from cache');
+		cache[num] = num * num;
+		return cache[num];
+	}
+}
 
 Encapsulation is a way of bundling/grouping the data and their associated methods/functions in one unit. It can be acheived with objects, functions and classes.
 1. Since all the code related to a feature/component is in one place, code becomes more manageable
@@ -84,19 +162,6 @@ const adminUser = new Admin('rikita');
 Rest parameters, identified by ..., allow a function to accept any number of arguments and converts it into an array.
 
 Every object in JS has a prototype property, which holds all the associated methods and properties provided by JS. For example, array is an object and we can use functions like filter/sort on top of an array but we never define them, so how are we able to use them. That's because Array has a prototype property which has all the methods like filter/sort attached, and in fact properties like length as well. So we don't have to define them again and again, we just borrow them from the prototype property.
-
-call(this, any extra arguments separated by comma) is used to call a method by passing the parent object as an argument. In other words, an object can call a method belonging to another object.
-apply(this, any extra arguments in an array) is used to call a method by passing the parent object as an argument.
-const funcs = {
-	func1: function(country) {
-		return this.name + ', ' + country;
-	}
-}
-
-const user = {name: 'sudipta'};
-
-funcs.func1.call(user, 'India');
-funcs.func1.apply(user, ['India']);
 
 Object.create is used to create a new object from an existing one but as a prototype
 const x = {
