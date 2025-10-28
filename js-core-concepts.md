@@ -4,18 +4,23 @@ JS is a dynamically typed language, which means the type of a variable is checke
 2. Derived data types -> ones which are used to store more complex values, like, objects
 
 Hoisting
+--------
 	1. JS interpreter moves the declaration of variables, functions, classes and imports to the top of their scope, before executing the code.
 	2. Variables decalred with var are hoisted to the top of their scope and initialised with a value of undefined. So, they are accessible before their declaration.
 	3. Variables declared with const and let are also hoisted, but they are not initialised. So, they cannot be accessed before they are declared, thereby throwing ReferenceError. Classes also behave the same way.
 	4. Temporal Dead Zone is the period between entering the scope of a function or a block of code and declaring let or const variables. If these variables are accessed before they are declared, they result in ReferenceError.
 
 Lexical Scoping
-	1. It's the term used to define how the variables are scoped (accessible) in JS based on where they are decalred and not where they are used.
+---------------
+	1. It's the term used to define how the variables are scoped (accessible) in JS based on where they are declared and not where they are used.
 	2. Global scope means a variable is accessible throughout the code.
 	3. Function scope means a variable is accessible only inside a function. var is function scoped.
 	4. Block scope means a variable is accessible inside a block designated by curly braces. let and const are block scoped.
+	5. var has global scope but const and let don't. That's why we can do window.<var_variable>.
 
-Coercion - when a value is automatically converted from one data type to another. For example, in 3 + '5', 3 is converted into a string to produce output 35. Also, in conditional statements, a condition is evaluated into a boolean value.
+Coercion
+--------
+	when a value is automatically converted from one data type to another. For example, in 3 + '5', 3 is converted into a string to produce output 35. Also, in conditional statements, a condition is evaluated into a boolean value.
 
 typeof is used to get the type of data
 typeof 'sud' -> string
@@ -33,7 +38,7 @@ Pass by value and pass by reference - all primitive types are passed by value wh
 var x = 10; -> space is allocated in memory for holding value 10 and x points to this memory location
 var y = x; -> another space is allocated in memory for holding value 10 and y points to this location
 var m = {} -> space is allocated in memory for holding an empty object
-var n = m; -> n still points to theme location that m points to
+var n = m; -> n still points to the location that m points to
 
 Higher order functions - which accept function as arguments or return them.
 
@@ -94,7 +99,7 @@ const result = func1();
 result.incrementCounter();
 result.getCounter();
 
-Callback functions are passed as an argument to another unction and generally they are called when a specific task has completed.
+Callback functions are passed as an argument to another function and generally they are called when a specific task has completed.
 
 Memoization - is the technique of caching results of a function based on input parameters.
 function getResult() {
@@ -106,15 +111,29 @@ function getResult() {
 	}
 }
 
+Debounce is a technique of limiting the rate at which a function is executed. The program waits for a period of inactivity before executing the function. For example, resizing a window/typing in a text field. This is done for improving performance specially in situations where the events are triggered frequently.
+
 Encapsulation is a way of bundling/grouping the data and their associated methods/functions in one unit. It can be acheived with objects, functions and classes.
 1. Since all the code related to a feature/component is in one place, code becomes more manageable
 2. External code interacts with the object only through its available methods, so we can ensure that data is not modified inappopriately, thereby giving more control
 
-Classes are templates used for creating objects with similar properties and methods. They are similar to functions and use prototypes under the hood.
-new keyword is used to create a new instance of a class, which is basically an object
-constructor function is called first, which initialises the properties of this new object
 
-Inheritance is a way using which one class inherits the properties and methods of another one and build some additional functionalities on top of that
+
+PROTOTYPES
+----------
+1. Every object in JS has a prototype property, which holds all the associated methods and properties provided by JS. For example, array is an object and we can use functions like filter/sort on top of an array but we never define them, so how are we able to use them. That's because Array has a prototype property which has all the methods like filter/sort attached, and in fact properties like length as well. So we don't have to define them again and again, we just borrow them from the prototype property.
+2. Prototypes allow us to use memory efficiently. As the methods are available on the prototype property, so any new instance/object does not need a copy of this method.
+3. Any changes made in the prototype will be applicable for all the objects.
+
+CLASSES
+-------
+1. Classes are templates used for creating objects with similar properties and methods. They are similar to functions and use prototypes under the hood.
+2. new keyword is used to create a new instance of a class, which is basically an object.
+3. constructor function is called first, which initialises the properties of this new object.
+
+INHERITANCE
+-----------
+Inheritance is a way using which one class inherits the properties and methods of another one and build some additional functionalities on top of that.
 class User { // parent class
 	constructor (name) {
 		this.name = name;
@@ -161,21 +180,32 @@ const adminUser = new Admin('rikita');
 
 Rest parameters, identified by ..., allow a function to accept any number of arguments and converts it into an array.
 
-Every object in JS has a prototype property, which holds all the associated methods and properties provided by JS. For example, array is an object and we can use functions like filter/sort on top of an array but we never define them, so how are we able to use them. That's because Array has a prototype property which has all the methods like filter/sort attached, and in fact properties like length as well. So we don't have to define them again and again, we just borrow them from the prototype property.
-
-Object.create is used to create a new object from an existing one but as a prototype
-const x = {
-	name: 'sudipta',
-	print: function() {
-		console.log(this.name, this.country);
-	}
-}
-
-const y = Object.create(x);
-Now y will be an empty object with name and print available in its prototype
-y.print() will yield sudipta undefined, as country is not defined
+WAYS TO CREATE OBJECTS
+	1. Using curly braces: {a: 1, b: 2}
+	2. Using new Object: var x = new Object(); x.a = 1; x.b = 2;
+	3. Using function and creating a new object off it:
+		a. function Person(name, age) {
+			this.name = name;
+			this.age = age;
+		}
+		b. var x = new Person('sudipta', 33);
+	4. Using Object.create - it will create a new object from an existing one but as a prototype
+		const x = {
+			name: 'sudipta',
+			print: function() {
+				console.log(this.name, this.country);
+			}
+		}
+		const y = Object.create(x);
+		Now y will be an empty object with name and print available in its prototype
+		y.print() will yield sudipta undefined, as country is not defined.
+	5. Using Object.assign: var x = Object.assign({}, {a: 1, b: 2}) - It will copy everything from second argument to first one.
 
 setTimeout(function(){}, 0) - It executes a callback function after waiting for a specified amount of time in ms. It is not executed immediately, rather it's added to a queue. Once the entire code block is run, this function gets picked up from the queue by the event loop and then executed.
+
+NULLISH COALESCING
+------------------
+?? is an operator, which evaluates its left side operand and if it is null or undefined, returns the right side operand. Otherwise, it returns the left side operand.
 
 OUTPUT
 1. function func1(){
