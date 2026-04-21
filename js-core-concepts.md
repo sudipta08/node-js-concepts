@@ -1,7 +1,21 @@
 JS is a dynamically typed language, which means the type of a variable is checked at run-time as opposed to TS where it's checked at the time of compilation.
 
+Everything else in JS is an object. An object means something which has its own set of properties and things which it can do i.e. methods/functions. For example, array has properties like length, methods like sort, map, slice, reduce etc. Infact, we can also do 'sud'.length because internally JS converts it into String object which has its own set of properties.
+
 1. Primitive data types -> in-built data types provided by JS, like, number, boolean, string, bigint, undefined, null -> these can hold only one value at once
 2. Derived data types -> ones which are used to store more complex values, like, objects
+
+typeof
+------
+	typeof operator is used to get the type of data
+	typeof 'sud' -> string
+	typeof 1 -> number
+	typeof NaN -> number
+	typeof true -> boolean
+	typeof undefined -> undefined
+	typeof null -> object
+	typeof [] -> object
+	typeof function/class -> function
 
 Hoisting
 --------
@@ -16,171 +30,199 @@ Lexical Scoping
 	2. Global scope means a variable is accessible throughout the code.
 	3. Function scope means a variable is accessible only inside a function. var is function scoped.
 	4. Block scope means a variable is accessible inside a block designated by curly braces. let and const are block scoped.
-	5. var has global scope but const and let don't. That's why we can do window.<var_variable>.
+	5. If declared outside a function, var has global scope but const and let don't. That's why we can do window.<var_variable>.
 
 Coercion
 --------
 	when a value is automatically converted from one data type to another. For example, in 3 + '5', 3 is converted into a string to produce output 35. Also, in conditional statements, a condition is evaluated into a boolean value.
 
-typeof is used to get the type of data
-typeof 'sud' -> string
-typeof 1 -> number
-typeof NaN -> number
-typeof true -> boolean
-typeof undefined -> undefined
-typeof null -> object
-typeof [] -> object
-typeof function/class -> function
+NULLISH COALESCING
+------------------
+	?? is an operator, which evaluates its left side operand and if it is null or undefined, returns the right side operand. Otherwise, it returns the left side operand.
 
-Everything else in JS is an object. An object means something which has its own set of properties and things which it can do i.e. methods/functions. For example, array has properties like length, methods like sort, map, slice, reduce etc. Infact, we can also do 'sud'.length because internally JS converts it into String object which has its own set of properties.
+PASS BY VALUE AND REFERENCE
+---------------------------
+	all primitive types are passed by value whereas objects and arrays are passed by reference.
+	var x = 10; -> space is allocated in memory for holding value 10 and x points to this memory location
+	var y = x; -> another space is allocated in memory for holding value 10 and y points to this location
+	var m = {} -> space is allocated in memory for holding an empty object
+	var n = m; -> n still points to the location that m points to
 
-Pass by value and pass by reference - all primitive types are passed by value whereas objects and arrays are passed by reference.
-var x = 10; -> space is allocated in memory for holding value 10 and x points to this memory location
-var y = x; -> another space is allocated in memory for holding value 10 and y points to this location
-var m = {} -> space is allocated in memory for holding an empty object
-var n = m; -> n still points to the location that m points to
+REST PARAMETERS
+---------------
+	identified by ..., allow a function to accept any number of arguments and converts it into an array.
 
-Higher order functions - which accept function as arguments or return them.
+HIGHER ORDER FUNCTIONS
+----------------------
+	which accept function as arguments or return them.
 
-call(this, any extra arguments separated by comma) is used to call a method by passing the parent object as an argument. In other words, an object can call a method belonging to another object.
-apply(this, any extra arguments in an array) is used to call a method by passing the parent object as an argument.
-bind - is used for setting the context of this keyword and behaves similar to call, but returns a function which can be invoked later. 
-const funcs = {
-	func1: function(country) {
-		return this.name + ', ' + country;
+CALL, APPLY AND BIND
+--------------------
+	1. call(this, any extra arguments separated by comma) is used to call a method by passing the parent object as an argument. In other words, an object can call a method belonging to another object.
+	2. apply(this, any extra arguments in an array) is used to call a method by passing the parent object as an argument.
+	3. bind - is used for setting the context of this keyword and behaves similar to call, but returns a function which can be invoked later. 
+	const funcs = {
+		func1: function(country) {
+			return this.name + ', ' + country;
+		}
 	}
-}
 
-const user = {name: 'sudipta'};
+	const user = {name: 'sudipta'};
 
-funcs.func1.call(user, 'India');
-funcs.func1.apply(user, ['India']);
-const boundfunction = funcs.func1.bind(user, 'India);
-boundfunction();
+	funcs.func1.call(user, 'India');
+	funcs.func1.apply(user, ['India']);
+	const boundfunction = funcs.func1.bind(user, 'India');
+	boundfunction();
 
-this is a keyword in JS, which refers to an object. Depending on the scope/context, it has different values.
-1. const a = {
-	name: 'sudipta',
-	getName: function() {
-		return this.name;
-	}
-} -> Here, this refers to the parent object and this.name will return 'sudipta'
-2. const b = {
-	name: 'sudipta',
-	getName: () => {
-		return this;
-	}
-} -> Here, this refers to the global object, which will be window object in browser and global in node. Same goes for IIFE
+THIS
+----
+	this is a keyword in JS, which refers to an object. Depending on the scope/context, it has different values.
+	1. const a = {
+		name: 'sudipta',
+		getName: function() {
+			return this.name;
+		}
+	} -> Here, this refers to the parent object and this.name will return 'sudipta'
+	2. const b = {
+		name: 'sudipta',
+		getName: () => {
+			return this;
+		}
+	} -> Here, this refers to the global object, which will be window object in browser and global in node. Same goes for IIFE
+	3. IMPORTANT: If we use an arrow function inside a class, then this refers to the class instance.
 
-Global is an object which has all the built-in functions and variables that node provides throughout the application, e.g., process, console etc. So, we don't have to import these before using.
+GLOBAL
+------
+	is an object which has all the built-in functions and variables that node provides throughout the application, e.g., process, console etc. So, we don't have to import these before using.
 
-Currying - is a technique of transforming a function which takes multiple arguments into a series of functions which takes one argument at a time.
-function add(a,b) {
-	return a + b;
-}
-function add(a) {
-	return function(b) {
+CALLBACK FUNCTIONS
+------------------
+	are passed as an argument to another function and generally they are called when a specific task has completed.
+
+CURRYING
+--------
+	is a technique of transforming a function which takes multiple arguments into a series of functions which takes one argument at a time.
+	function add(a,b) {
 		return a + b;
 	}
-} -> one advantage of doing this is that we keep some of the arguments same and change the rest. For example, x = add(10); y = x(39); z = x(90);
+	function add(a) {
+		return function(b) {
+			return a + b;
+		}
+	} -> one advantage of doing this is that we keep some of the arguments same and change the rest.
+	For example,
+	x = add(10);
+	y = x(39);
+	z = x(90);
 
-Closure - is the capability of a function to access variables and functions from its outer scope (even after the outer function has executed).
-function func1() {
-	let counter = 0;
-	function incrementCounter() {
-		counter++;
+CLOSURE
+-------
+	is the capability of a function to access variables and functions from its outer scope (even after the outer function has executed).
+	function func1() {
+		let counter = 0;
+		function incrementCounter() {
+			counter++;
+		}
+		function getCounter() {
+			return counter;
+		}
+		return {incrementCounter, getCounter};
 	}
-	function getCounter() {
-		return counter;
+	const result = func1();
+	result.incrementCounter();
+	result.getCounter();
+
+MEMOIZATION
+-----------
+	is the technique of caching results of a function based on input parameters.
+	function getResult() {
+		const cache = {};
+		return function(num) {
+			if (cache[num]) console.log('from cache');
+			cache[num] = num * num;
+			return cache[num];
+		}
 	}
-	return {incrementCounter, getCounter};
-}
-const result = func1();
-result.incrementCounter();
-result.getCounter();
 
-Callback functions are passed as an argument to another function and generally they are called when a specific task has completed.
-
-Memoization - is the technique of caching results of a function based on input parameters.
-function getResult() {
-	const cache = {};
-	return function(num) {
-		if (cache[num]) console.log('from cache');
-		cache[num] = num * num;
-		return cache[num];
-	}
-}
-
-Debounce is a technique of limiting the rate at which a function is executed. The program waits for a period of inactivity before executing the function. For example, resizing a window/typing in a text field. This is done for improving performance specially in situations where the events are triggered frequently.
-
-Encapsulation is a way of bundling/grouping the data and their associated methods/functions in one unit. It can be acheived with objects, functions and classes.
-1. Since all the code related to a feature/component is in one place, code becomes more manageable
-2. External code interacts with the object only through its available methods, so we can ensure that data is not modified inappopriately, thereby giving more control
-
-
+DEBOUNCE
+--------
+	is a technique of limiting the rate at which a function is executed. The program waits for a period of inactivity before executing the function. For example, resizing a window/typing in a text field. This is done for improving performance specially in situations where the events are triggered frequently.
 
 PROTOTYPES
 ----------
-1. Every object in JS has a prototype property, which holds all the associated methods and properties provided by JS. For example, array is an object and we can use functions like filter/sort on top of an array but we never define them, so how are we able to use them. That's because Array has a prototype property which has all the methods like filter/sort attached, and in fact properties like length as well. So we don't have to define them again and again, we just borrow them from the prototype property.
-2. Prototypes allow us to use memory efficiently. As the methods are available on the prototype property, so any new instance/object does not need a copy of this method.
-3. Any changes made in the prototype will be applicable for all the objects.
+	1. Every object in JS has a prototype property, which holds all the associated methods and properties provided by JS. For example, array is an object and we can use functions like filter/sort on top of an array but we never define them, so how are we able to use them. That's because Array has a prototype property which has all the methods like filter/sort attached, and in fact properties like length as well. So we don't have to define them again and again, we just borrow them from the prototype property.
+	2. Prototypes allow us to use memory efficiently. As the methods are available on the prototype property, so any new instance/object does not need a copy of this method.
+	3. Any changes made in the prototype will be applicable for all the objects.
 
 CLASSES
 -------
-1. Classes are templates used for creating objects with similar properties and methods. They are similar to functions and use prototypes under the hood.
-2. new keyword is used to create a new instance of a class, which is basically an object.
-3. constructor function is called first, which initialises the properties of this new object.
+	1. Classes are templates used for creating objects with similar properties and methods. They are similar to functions and use prototypes under the hood.
+	2. new keyword is used to create a new instance of a class, which is basically an object.
+	3. constructor function is called first, which initialises the properties of this new object.
+
+ENCAPSULATION
+-------------
+	Encapsulation is a way of bundling/grouping the data and their associated methods/functions in one unit. It can be acheived with objects, functions and classes.
+	1. Since all the code related to a feature/component is in one place, code becomes more manageable.
+	2. External code interacts with the object only through its available methods, so we can ensure that data is not modified inappopriately, thereby giving more control.
 
 INHERITANCE
 -----------
-Inheritance is a way using which one class inherits the properties and methods of another one and build some additional functionalities on top of that.
-class User { // parent class
-	constructor (name) {
-		this.name = name;
+	Inheritance is a way using which one class inherits the properties and methods of another one and build some additional functionalities on top of that.
+
+	class User { // parent class
+		constructor (name) {
+			this.name = name;
+		}
+		login() {
+			console.log('logged in');
+		}
 	}
-	login() {
+	class Admin extends User { // child class
+		constructor(name, role) {
+			super(name);
+			this.role = role;
+		}
+		deleteUser() {
+			console.log('deleted user');
+		}
+	}
+
+	1. If there is no constructor in the child class, the one from parent class will be invoked.
+	2. If we want to add some additional properties to the constructor we need to call super() in the constructor of child class.
+	3. Properties and methods of child class will override the ones from parent class.
+
+PROTOTYPAL INHERITANCE
+----------------------
+	is a way by which objects inherit the properties and methods of other objects via prototypes.
+	Before ES6, this was achieved with functions. class is just a syntactic sugar
+	function User(name) {
+		this.name = name;
+		this.login = function() { // we can do this but not preferred, prototype inheritance can't be done
+			console.log('logged in');
+		}
+	}
+	// instead the functions should be attached on prototype, and classes do that under the hood
+	User.prototype.login = function() {
 		console.log('logged in');
 	}
-}
-class Admin extends User { // child class
-	deleteUser() {
+
+	const user1 = new User('sudipta');
+
+	function Admin(...args) {
+		User.apply(this, args); // this will inherit all the properties of User function, except the prototype object
+	}
+
+	Admin.prototype = Object.create(User.prototype); // inherit all the functions on prototype of User
+
+	Admin.prototype.deleteUser = function() {
 		console.log('deleted user');
 	}
-}
 
-1. If there is no constructor in the child class, the one from parent class will be invoked.
-2. If we want to add some additional properties to the constructor we need to call super() in the constructor of child class.
-3. Properties and methods of child class will override the ones from parent class.
-
-Before ES6, this was achieved with functions. class is just a syntactic sugar
-function User(name) {
-	this.name = name;
-	this.login = function() { // we can do this but not preferred, prototype inheritance can't be done
-		console.log('logged in');
-	}
-}
-// instead the functions should be attached on prototype, and classes do that under the hood
-User.prototype.login = function() {
-	console.log('logged in');
-}
-
-const user1 = new User('sudipta');
-
-function Admin(...args) {
-	User.apply(this, args); // this will inherit all the properties of User function, except the prototype object
-}
-
-Admin.prototype = Object.create(User.prototype); // inherit all the functions on prototype of User
-
-Admin.prototype.deleteUser = function() {
-	console.log('deleted user');
-}
-
-const adminUser = new Admin('rikita');
-
-Rest parameters, identified by ..., allow a function to accept any number of arguments and converts it into an array.
+	const adminUser = new Admin('rikita');
 
 WAYS TO CREATE OBJECTS
+----------------------
 	1. Using curly braces: {a: 1, b: 2}
 	2. Using new Object: var x = new Object(); x.a = 1; x.b = 2;
 	3. Using function and creating a new object off it:
@@ -201,70 +243,13 @@ WAYS TO CREATE OBJECTS
 		y.print() will yield sudipta undefined, as country is not defined.
 	5. Using Object.assign: var x = Object.assign({}, {a: 1, b: 2}) - It will copy everything from second argument to first one.
 
-setTimeout(function(){}, 0) - It executes a callback function after waiting for a specified amount of time in ms. It is not executed immediately, rather it's added to a queue. Once the entire code block is run, this function gets picked up from the queue by the event loop and then executed.
+setTimeout
+----------
+	setTimeout(function(){}, 0) - It executes a callback function after waiting for a specified amount of time in ms. It is not executed immediately, rather it's added to a queue. Once the entire code block is run, this function gets picked up from the queue by the event loop and then executed.
 
-NULLISH COALESCING
-------------------
-?? is an operator, which evaluates its left side operand and if it is null or undefined, returns the right side operand. Otherwise, it returns the left side operand.
-
-OUTPUT
-1. function func1(){
-	setTimeout(()=>{
-		console.log(x);
-		console.log(y);
-	},3000);
-
-	var x = 2;
-	let y = 12;
-}
-
-func1();
-
-This will print 2 and 12. Since setTimeout will run after the whole function code finishes, so it will have access to x and y.
-
-2. function func2(){
-	for(var i = 0; i < 3; i++){
-		setTimeout(()=> console.log(i),2000);
-	}
-}
-func2();
-
-This will print 3, three times, because each setTimeout will be executed after the entire for loop is run. Since var is function scoped, so the value at the end will be 3.
-
-	Approach 1:
-	However, if we use let here, which is block scoped, the value of i will persist for each iteration.
-
-	Approach 2: Using IIFE
-	function func2(){
-		for(var i = 0; i < 3; i++){ // it won't matter if i am using let or var
-			(function (i) {
-				setTimeout(()=> console.log(i),2000);
-			})(i);
-		}
-	}
-
-	Approach 3: Using a separate function
-	function func3(i) {
-		setTimeout(()=> console.log(i),2000);
-	}
-	function func2(){
-		for(var i = 0; i < 3; i++){ // it won't matter if i am using let or var
-			func3(i);
-		}
-	}
-
-3. let x = {}, y = {name:"Ronny"},z = {name:"John"};
-x[y] = {name:"Vivek"};
-x[z] = {name:"Akki"};
-console.log(x[y]);
-
-x[y] = x['[object Object]'], same as x[z]
-Output will be {name: 'Akki'}
-
-4. function runFunc(){
-	console.log("1" + 1); // 11 -> always concatenate if one of the operands is string
-	console.log("A" - 1); // NaN
-	console.log(2 + "-2" + "2"); // 2-22
-	console.log("Hello" - "World" + 78); // NaN
-	console.log("Hello"+ "78"); // Hello78
-}
+IMPORTING JS IN HTML
+--------------------
+	- we can write inline javascript in script tag
+	- we can import external files in script tag using src attribute. For example, <script src="./test.js"></script>
+	- in mordern applications, we can also mention type attribute as "module" in script tag. This will allow javascript file to be treated as a module and we can use import and export statements in that file.
+	- if we do [[export default 'xyz']], we don't need to specify any variable name. And while importing, we can say, [[import anyVarName from './test.js']]. Now, anyVarName will have value 'xyz'. Note that a file can have only one default value.
